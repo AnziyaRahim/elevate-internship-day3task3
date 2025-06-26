@@ -1,0 +1,64 @@
+TASK 3
+
+SELECT * FROM books;
+
+
+SELECT 
+    book_id AS "ID",
+    title AS "Book Title",
+    publication_year AS "Year Published"
+FROM books;
+
+
+SELECT title, author_id, publication_year
+FROM books
+WHERE publication_year > 2010;
+
+
+SELECT title, publication_year
+FROM books
+WHERE title LIKE '%Harry Potter%';
+
+
+SELECT b.title, a.author_name
+FROM books b
+JOIN authors a ON b.author_id = a.author_id
+WHERE b.checked_out = 0;
+
+
+SELECT b.title, br.borrower_name, br.due_date
+FROM books b
+JOIN borrowers br ON b.book_id = br.book_id
+WHERE br.borrower_id = 123;
+
+
+SELECT title, publication_year
+FROM books
+WHERE publication_year BETWEEN 2000 AND 2010
+ORDER BY publication_year;
+
+
+SELECT title, publication_year
+FROM books
+ORDER BY publication_year DESC
+LIMIT 5;
+
+
+SELECT title, author_id, publication_year
+FROM books
+WHERE author_id = 45 OR publication_year = 2022;
+
+
+SELECT 
+    b.title,
+    a.author_name,
+    br.borrower_name,
+    br.checkout_date,
+    br.due_date,
+    julianday('now') - julianday(br.due_date) AS days_overdue
+FROM books b
+JOIN authors a ON b.author_id = a.author_id
+JOIN borrowers br ON b.book_id = br.book_id
+WHERE br.returned_date IS NULL 
+  AND br.due_date < date('now')
+ORDER BY days_overdue DESC;
